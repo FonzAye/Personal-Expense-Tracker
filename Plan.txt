@@ -1,0 +1,9 @@
+So... , you can:
+enter info:
+	- time (dd/mm/yy, hh/mm/ss)
+	- details (card number, card holder)
+	- sum (UAH)
+	- remains (UAH)
+it will:
+	- display info
+	- make smth, idk

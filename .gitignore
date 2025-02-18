@@ -1,0 +1,5 @@
+git.txt
+client/node_modules/
+server/node_modules/
+terraform/web app/.terraform/
+.git/
