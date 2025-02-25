@@ -19,6 +19,28 @@ provider "aws" {
   region = "eu-central-1"
 }
 
-module "database" {
-  source = "../modules/database"
+module "network" {
+  source = "../modules/network"
+
+  assign_public_ip = true
+}
+
+# module "database" {
+#   source = "../modules/database"
+
+#   # Input Variables
+#   tags = {Name="database"}
+#   create_secret = false
+#   subnet_ids = [ module.network.subnet_id_public, module.network.subnet_id_private, module.network.subnet_id_db ]
+# }
+
+module "server" {
+  source = "../modules/compute"
+
+  # Input Variables
+  instance_type = "t2.micro"
+  key_name = "pipi"
+  subnet_id = module.network.subnet_id_public
+  vpc_security_group_ids = module.network.vpc_security_group_ids
+  instance_name = "backend"
 }
