@@ -10,6 +10,10 @@ output "subnet_id_db" {
   value = aws_subnet.db.id
 }
 
-output "vpc_security_group_ids" {
+output "vpc_security_group_ids_instances" {
   value = aws_security_group.instances.id
+}
+
+output "vpc_security_group_ids_rds" {
+  value = aws_security_group.rds_sg.id
 }

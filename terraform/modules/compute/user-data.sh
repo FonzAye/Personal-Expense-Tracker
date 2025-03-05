@@ -11,28 +11,29 @@ git clone https://github.com/FonzAye/test.git /opt/backend
 cd /opt/backend
 
 # Install dependencies and start the backend
-npm install
-nohup npm start &
+sudo npm install
+sudo npm start
+# nohup npm start &
 
-# # Create a dedicated system user (e.g., backenduser) for security:
-# useradd -r -m -d /opt/backend -s /bin/false backenduser
-# chown -R backenduser:backenduser /opt/backend
+# # # Create a dedicated system user (e.g., backenduser) for security:
+# # useradd -r -m -d /opt/backend -s /bin/false backenduser
+# # chown -R backenduser:backenduser /opt/backend
 
-# Ensure the service keeps running
-echo "[Unit]
-Description=Backend Service
-After=network.target
+# # Ensure the service keeps running
+# echo "[Unit]
+# Description=Backend Service
+# After=network.target
 
-[Service]
-ExecStart=/usr/bin/npm start
-WorkingDirectory=/opt/backend
-Restart=always
-User=backenduser
+# [Service]
+# ExecStart=/usr/bin/npm start
+# WorkingDirectory=/opt/backend
+# Restart=always
+# User=backenduser
 
-[Install]
-WantedBy=multi-user.target" > /etc/systemd/system/backend.service
+# [Install]
+# WantedBy=multi-user.target" > /etc/systemd/system/backend.service
 
-# Enable and start the service
-systemctl daemon-reload
-systemctl enable backend
-systemctl start backend
+# # Enable and start the service
+# systemctl daemon-reload
+# systemctl enable backend
+# systemctl start backend

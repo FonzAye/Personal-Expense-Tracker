@@ -1,38 +1,16 @@
 #!/bin/bash
-# Update and install dependencies
+echo "Update and install dependencies" > /var/log/mylog.log
 sudo apt update -y && sudo apt upgrade -y
 sudo apt install -y git curl nodejs npm
 
 
-# Clone your backend repository
+echo "Clone your backend repository" >> /var/log/mylog.log
 git clone https://github.com/FonzAye/test.git /opt/backend
 
-# Navigate to the project directory
+echo "Navigate to the project directory" >> /var/log/mylog.log
 cd /opt/backend
 
-# Install dependencies and start the backend
-npm install
-# nohup npm start &
-
-# # Create a dedicated system user (e.g., backenduser) for security:
-# useradd -r -m -d /opt/backend -s /bin/false backenduser
-# chown -R backenduser:backenduser /opt/backend
-
-# Ensure the service keeps running
-echo "[Unit]
-Description=Backend Service
-After=network.target
-
-[Service]
-ExecStart=/usr/bin/npm start
-WorkingDirectory=/opt/backend
-Restart=always
-User=backenduser
-
-[Install]
-WantedBy=multi-user.target" > /etc/systemd/system/backend.service
-
-# Enable and start the service
-systemctl daemon-reload
-systemctl enable backend
-systemctl start backend
+echo "Install dependencies" >> /var/log/mylog.log
+sudo npm install
+echo "start backend" >> /var/log/mylog.log
+sudo npm start

@@ -20,7 +20,8 @@ resource "aws_instance" "ec2" {
   key_name      = var.key_name
   subnet_id     = var.subnet_id
   vpc_security_group_ids = [ var.vpc_security_group_ids ]
-  user_data = file("files/user-data.sh")
+  user_data = var.user_data_path
+  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
 
   tags = {
     Name = var.instance_name
@@ -49,6 +50,12 @@ resource "aws_iam_role" "ec2_role" {
     tag-key = "EC2SecretRole"
   }
 }
+
+resource "aws_iam_instance_profile" "ec2_profile" {
+  name = "ec2_secret_profile"
+  role = aws_iam_role.ec2_role.name
+}
+
 
 resource "aws_iam_policy" "secrets_policy" {
   name = "SecretsManagerPolicy"

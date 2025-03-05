@@ -20,6 +20,7 @@ resource "aws_db_instance" "database" {
   skip_final_snapshot  = var.skip_final_snapshot
   port                 = var.port
   db_subnet_group_name = aws_db_subnet_group.my_db.name
+  vpc_security_group_ids = var.vpc_security_group_ids
 
   tags = var.tags
 }
@@ -44,7 +45,7 @@ resource "aws_secretsmanager_secret_version" "db_secret_value" {
   secret_id     = local.db_secret_id
   secret_string = jsonencode({
     DB_USER = aws_db_instance.database.username
-    DB_HOST = aws_db_instance.database.endpoint
+    DB_HOST = aws_db_instance.database.address
     DB_NAME = aws_db_instance.database.db_name
     DB_PASS = aws_db_instance.database.password
     DB_PORT = aws_db_instance.database.port

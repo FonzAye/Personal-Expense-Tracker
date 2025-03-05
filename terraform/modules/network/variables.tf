@@ -82,8 +82,8 @@ variable "security_group_tags" {
   default     = { Name = "instances" }
 }
 
-variable "http_ingress" {
-  description = "Ingress rule for HTTP"
+variable "http_ingress1" {
+  description = "Ingress rule 1 for HTTP"
   type = object({
     description = string
     cidr_ipv4   = string
@@ -97,6 +97,24 @@ variable "http_ingress" {
     from_port   = 80
     ip_protocol = "tcp"
     to_port     = 80
+  }
+}
+
+variable "http_ingress2" {
+  description = "Ingress rule 2 for HTTP"
+  type = object({
+    description = string
+    cidr_ipv4   = string
+    from_port   = number
+    ip_protocol = string
+    to_port     = number
+  })
+  default = {
+    description = "Allow HTTP inbound traffic on port 5000"
+    cidr_ipv4   = "0.0.0.0/0"
+    from_port   = 5000
+    ip_protocol = "tcp"
+    to_port     = 5000
   }
 }
 
@@ -115,6 +133,24 @@ variable "ssh_ingress" {
     from_port   = 22
     ip_protocol = "tcp"
     to_port     = 22
+  }
+}
+
+variable "rds_ingress" {
+  description = "Ingress rule for RDS"
+  type = object({
+    description = string
+    cidr_ipv4   = string
+    from_port   = number
+    ip_protocol = string
+    to_port     = number
+  })
+  default = {
+    description = "Allow inbound traffic from my IP and EC2 security group"
+    cidr_ipv4   = "46.133.65.59/32" # My IP
+    from_port   = 5432
+    ip_protocol = "tcp"
+    to_port     = 5432
   }
 }
 

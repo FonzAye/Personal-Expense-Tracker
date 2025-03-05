@@ -1,5 +1,4 @@
 const { Pool } = require('pg');
-require('dotenv').config(); // Ensure environment variables are loaded
 
 // Configure AWS SDK
 const { SecretsManagerClient, GetSecretValueCommand } = require("@aws-sdk/client-secrets-manager");
@@ -26,33 +25,40 @@ const fetchSecret = async () => {
   }
 };
 
-console.log("hello!");
+async function initializeDb(retries = 10, delay = 5000) {
+  let attempt = 0;
+  let pool;
 
-async function initializeDb() {
-  const dbConfig = await fetchSecret();
+  while (attempt < retries) {
+    try {
+      console.log(`Attempt ${attempt + 1}: Fetching DB secrets...`);
+      const data = await fetchSecret();
+      const dbConfig = JSON.parse(data);
 
-  const pool = new Pool({
-    user: dbConfig.DB_USER,
-    host: dbConfig.DB_HOST,
-    database: dbConfig.DB_NAME,
-    password: dbConfig.DB_PASS,
-    port: dbConfig.DB_PORT,
-    ssl: { rejectUnauthorized: false },
-  });
+      pool = new Pool({
+        user: dbConfig.DB_USER,
+        host: dbConfig.DB_HOST,
+        database: dbConfig.DB_NAME,
+        password: dbConfig.DB_PASS,
+        port: dbConfig.DB_PORT,
+        ssl: { rejectUnauthorized: false },
+      });
 
-  console.log(dbConfig);
-  return pool;
+      // Test the connection
+      await pool.query("SELECT 1");
+      console.log("Database connected successfully!");
+      return pool;
+    } catch (err) {
+      attempt++;
+      console.error(`Database connection failed (attempt ${attempt}/${retries}). Retrying in ${delay / 1000} seconds...`, err);
+      if (attempt >= retries) {
+        console.error("All retries failed. Exiting...");
+        process.exit(1);
+      }
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  }
 }
-// const pool = new Pool({
-//   user: process.env.DB_USER,
-//   host: process.env.DB_HOST,
-//   database: process.env.DB_NAME,
-//   password: process.env.DB_PASS,
-//   port: process.env.DB_PORT || 5432,
-//   ssl: {
-//     rejectUnauthorized: false,
-//   },
-// });
 
 // Function to create tables if they don't exist
 const createTables = async (pool) => {
@@ -120,6 +126,7 @@ const addExpense = async (pool, userId, amount, category, date, description) => 
 // Initialize DB and run setup
 (async () => {
   const pool = await initializeDb();
+  console.log("Starting DB connection")
 
   try {
     // Check connection

@@ -24,3 +24,8 @@ variable "instance_name" {
   description = "The name tag for the EC2 instance"
   type        = string
 }
+
+variable "user_data_path" {
+  description = "user-data.sh file path"
+  type = string
+}
