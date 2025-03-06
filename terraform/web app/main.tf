@@ -45,4 +45,18 @@ module "server" {
   vpc_security_group_ids = module.network.vpc_security_group_ids_instances
   instance_name = "backend"
   user_data_path = file("./files/create-server.sh")
+  create_iam_role = true
+}
+
+module "client" {
+  source = "../modules/compute"
+
+  # Input Variables
+  instance_type = "t2.micro"
+  key_name = "pipi"
+  subnet_id = module.network.subnet_id_public
+  vpc_security_group_ids = module.network.vpc_security_group_ids_instances
+  instance_name = "frontend"
+  user_data_path = file("./files/create-client.sh")
+  create_iam_role = true
 }

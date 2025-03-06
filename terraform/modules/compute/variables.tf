@@ -29,3 +29,8 @@ variable "user_data_path" {
   description = "user-data.sh file path"
   type = string
 }
+
+variable "create_iam_role" {
+  description = "Variable to determine whether to create IAM role for EC2"
+  type = bool
+}

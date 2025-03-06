@@ -29,6 +29,7 @@ resource "aws_instance" "ec2" {
 }
 
 resource "aws_iam_role" "ec2_role" {
+  count = var.create_iam_role ? 1 : 0
   name = "EC2SecretsManagerRole"
   assume_role_policy = jsonencode({
     "Version": "2012-10-17",
@@ -52,12 +53,14 @@ resource "aws_iam_role" "ec2_role" {
 }
 
 resource "aws_iam_instance_profile" "ec2_profile" {
+  count = var.create_iam_role ? 1 : 0
   name = "ec2_secret_profile"
   role = aws_iam_role.ec2_role.name
 }
 
 
 resource "aws_iam_policy" "secrets_policy" {
+  count = var.create_iam_role ? 1 : 0
   name = "SecretsManagerPolicy"
   description = "EC2 Secret Access"
   policy = jsonencode({
@@ -76,6 +79,7 @@ resource "aws_iam_policy" "secrets_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "attach_secrets_policy" {
+  count = var.create_iam_role ? 1 : 0
   policy_arn = aws_iam_policy.secrets_policy.arn
   role       = aws_iam_role.ec2_role.name
 }
