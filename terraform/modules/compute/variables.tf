@@ -34,3 +34,8 @@ variable "create_iam_role" {
   description = "Variable to determine whether to create IAM role for EC2"
   type = bool
 }
+
+variable "create_eip" {
+  description = "Varialbe to determine whether to create EIP"
+  type = bool
+}

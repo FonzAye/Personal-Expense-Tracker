@@ -21,11 +21,16 @@ resource "aws_instance" "ec2" {
   subnet_id     = var.subnet_id
   vpc_security_group_ids = [ var.vpc_security_group_ids ]
   user_data = var.user_data_path
-  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
+  iam_instance_profile = length(aws_iam_instance_profile.ec2_profile) > 0 ? aws_iam_instance_profile.ec2_profile[0].name : null
 
   tags = {
     Name = var.instance_name
   }
+}
+
+resource "aws_eip" "eip" {
+  count = var.create_eip ? 1 : 0
+  instance = aws_instance.ec2.id
 }
 
 resource "aws_iam_role" "ec2_role" {
@@ -55,7 +60,7 @@ resource "aws_iam_role" "ec2_role" {
 resource "aws_iam_instance_profile" "ec2_profile" {
   count = var.create_iam_role ? 1 : 0
   name = "ec2_secret_profile"
-  role = aws_iam_role.ec2_role.name
+  role = aws_iam_role.ec2_role[0].name
 }
 
 
@@ -80,10 +85,10 @@ resource "aws_iam_policy" "secrets_policy" {
 
 resource "aws_iam_role_policy_attachment" "attach_secrets_policy" {
   count = var.create_iam_role ? 1 : 0
-  policy_arn = aws_iam_policy.secrets_policy.arn
-  role       = aws_iam_role.ec2_role.name
+  policy_arn = aws_iam_policy.secrets_policy[0].arn
+  role       = aws_iam_role.ec2_role[0].name
 }
 
-output "instance_id" {
-  value = aws_instance.ec2.id
+output "eip" {
+  value = length(aws_eip.eip) > 0 ? aws_eip.eip[0].public_ip : "what the fuck ?"
 }

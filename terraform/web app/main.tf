@@ -46,9 +46,11 @@ module "server" {
   instance_name = "backend"
   user_data_path = file("./files/create-server.sh")
   create_iam_role = true
+  create_eip = true
 }
 
 module "client" {
+  depends_on = [ module.server ]
   source = "../modules/compute"
 
   # Input Variables
@@ -57,6 +59,9 @@ module "client" {
   subnet_id = module.network.subnet_id_public
   vpc_security_group_ids = module.network.vpc_security_group_ids_instances
   instance_name = "frontend"
-  user_data_path = file("./files/create-client.sh")
-  create_iam_role = true
+  user_data_path = templatefile("./files/create-client.tpl", {
+    backend_ip = module.server.eip
+  })
+  create_iam_role = false
+  create_eip = false
 }
