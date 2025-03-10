@@ -6,7 +6,7 @@ sudo apt install -y git curl nodejs npm
 
 
 # Clone your backend repository
-git clone git clone -b client https://github.com/FonzAye/Personal-Expense-Tracker.git /opt/frontend
+git clone -b client https://github.com/FonzAye/Personal-Expense-Tracker.git /opt/frontend
 
 BACKEND_IP="${backend_ip}"
 
