@@ -1,0 +1,94 @@
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"] // AMI name contains :
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
+}
+
+resource "aws_instance" "ec2" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = var.instance_type
+  key_name      = var.key_name
+  subnet_id     = var.subnet_id
+  vpc_security_group_ids = [ var.vpc_security_group_ids ]
+  user_data = var.user_data_path
+  iam_instance_profile = length(aws_iam_instance_profile.ec2_profile) > 0 ? aws_iam_instance_profile.ec2_profile[0].name : null
+
+  tags = {
+    Name = var.instance_name
+  }
+}
+
+resource "aws_eip" "eip" {
+  count = var.create_eip ? 1 : 0
+  instance = aws_instance.ec2.id
+}
+
+resource "aws_iam_role" "ec2_role" {
+  count = var.create_iam_role ? 1 : 0
+  name = "EC2SecretsManagerRole"
+  assume_role_policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "sts:AssumeRole"
+            ],
+            "Principal": {
+                "Service": [
+                    "ec2.amazonaws.com"
+                ]
+            }
+        }
+    ]
+})
+  tags = {
+    tag-key = "EC2SecretRole"
+  }
+}
+
+resource "aws_iam_instance_profile" "ec2_profile" {
+  count = var.create_iam_role ? 1 : 0
+  name = "ec2_secret_profile"
+  role = aws_iam_role.ec2_role[0].name
+}
+
+
+resource "aws_iam_policy" "secrets_policy" {
+  count = var.create_iam_role ? 1 : 0
+  name = "SecretsManagerPolicy"
+  description = "EC2 Secret Access"
+  policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "BasePermissions",
+            "Effect": "Allow",
+            "Action": [
+                "secretsmanager:GetSecretValue",
+            ],
+            "Resource": "*"
+        },
+    ]
+})
+}
+
+resource "aws_iam_role_policy_attachment" "attach_secrets_policy" {
+  count = var.create_iam_role ? 1 : 0
+  policy_arn = aws_iam_policy.secrets_policy[0].arn
+  role       = aws_iam_role.ec2_role[0].name
+}
+
+output "eip" {
+  value = length(aws_eip.eip) > 0 ? aws_eip.eip[0].public_ip : "what the fuck ?"
+}
