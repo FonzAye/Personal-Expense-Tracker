@@ -94,9 +94,9 @@ variable "http_ingress1" {
   default = {
     description = "Allow HTTP inbound traffic"
     cidr_ipv4   = "0.0.0.0/0"
-    from_port   = 80
+    from_port   = 8080
     ip_protocol = "tcp"
-    to_port     = 80
+    to_port     = 8080
   }
 }
 
