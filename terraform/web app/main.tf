@@ -49,19 +49,19 @@ module "server" {
   create_eip = true
 }
 
-# module "client" {
-#   depends_on = [ module.server ]
-#   source = "../modules/compute"
+module "client" {
+  depends_on = [ module.server ]
+  source = "../modules/compute"
 
-#   # Input Variables
-#   instance_type = "t2.micro"
-#   key_name = "pipi"
-#   subnet_id = module.network.subnet_id_public
-#   vpc_security_group_ids = module.network.vpc_security_group_ids_instances
-#   instance_name = "frontend"
-#   user_data_path = templatefile("./files/create-client.tpl", {
-#     backend_ip = module.server.eip
-#   })
-#   create_iam_role = false
-#   create_eip = false
-# }
+  # Input Variables
+  instance_type = "t2.micro"
+  key_name = "pipi"
+  subnet_id = module.network.subnet_id_public
+  vpc_security_group_ids = module.network.vpc_security_group_ids_instances
+  instance_name = "frontend"
+  user_data_path = templatefile("./files/create-client.tpl", {
+    backend_ip = module.server.eip
+  })
+  create_iam_role = false
+  create_eip = false
+}

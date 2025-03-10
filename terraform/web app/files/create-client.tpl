@@ -6,20 +6,20 @@ sudo apt install -y git curl nodejs npm
 
 
 # Clone your backend repository
-git clone -b client https://github.com/FonzAye/Personal-Expense-Tracker.git /opt/frontend
+git clone -b client https://github.com/FonzAye/Personal-Expense-Tracker.git /opt
 
 BACKEND_IP="${backend_ip}"
 
-cat <<EOF > /opt/frontend/config.js
+cat <<EOF > /opt/client/config.js
 window.APP_CONFIG = {
     BACKEND_IP: "$BACKEND_IP"
 };
 EOF
 
-sudo chmod 644 /opt/frontend/config.js
+sudo chmod 644 /opt/client/config.js
 
 # Set the hyve-api directory path as a variable
-API_DIR="/opt/frontend"
+API_DIR="/opt/client"
 
 # Change to the server directory, install dependencies and start the server
 cd "$API_DIR"
@@ -37,7 +37,7 @@ After=network.target
 
 [Service]
 ExecStart=/usr/bin/npx http-server -p 8000
-WorkingDirectory=/opt/frontend
+WorkingDirectory=/opt/client
 Restart=always
 User=ubuntu
 Environment=NODE_ENV=production

@@ -6,10 +6,10 @@ sudo apt install -y git curl nodejs npm
 
 
 # Clone your backend repository
-git clone -b server https://github.com/FonzAye/Personal-Expense-Tracker.git /opt/backend
+git clone -b server https://github.com/FonzAye/Personal-Expense-Tracker.git /opt
 
 # Set the hyve-api directory path as a variable
-API_DIR="/opt/backend"
+API_DIR="/opt/server"
 
 # Change to the server directory, install dependencies and start the server
 cd "$API_DIR"
@@ -27,7 +27,7 @@ After=network.target
 
 [Service]
 ExecStart=/usr/bin/npm start
-WorkingDirectory=/opt/backend
+WorkingDirectory=/opt/server
 Restart=always
 User=ubuntu
 Environment=NODE_ENV=production
