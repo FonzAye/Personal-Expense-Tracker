@@ -36,7 +36,7 @@ Description=Frontend Service
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/npx http-server -p 8000
+ExecStart=/usr/bin/npx http-server -p 80
 WorkingDirectory=/opt/client
 Restart=always
 User=ubuntu
