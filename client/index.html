@@ -98,12 +98,11 @@
             <ul class="expense-list" id="expenseList"></ul>
         </div>
     </div>
-
+    <script src="config.js"></script>
     <script>
         // Store the IP addresses in variables for easy modification
-        const API_BASE_URL = 'http://54.93.44.125:5000';
-        const DELETE_API_BASE_URL = 'http://54.93.44.125:5000';
-        const EXPENSE_API_BASE_URL = 'http://54.93.44.125:5000';
+        const API_BASE_URL = window.APP_CONFIG.BACKEND_IP;
+        console.log("backend ip = ", API_BASE_URL)
 
         // Fetch Users Button Logic
         document.getElementById('fetchUsersBtn').addEventListener('click', async () => {
@@ -151,7 +150,7 @@
         // Delete ALL Users Button Logic
         document.getElementById('deleteAllUsersBtn').addEventListener('click', async () => {
             try {
-                const response = await fetch(`${DELETE_API_BASE_URL}/api/users/delete/all`, {
+                const response = await fetch(`${API_BASE_URL}/api/users/delete/all`, {
                     method: 'DELETE'
                 });
 
@@ -171,7 +170,7 @@
         document.getElementById('addExpenseBtn').addEventListener('click', async () => {
             const jsonText = document.getElementById('addExpenseJson').value;
             try {
-                const response = await fetch(`${EXPENSE_API_BASE_URL}/api/expenses`, {
+                const response = await fetch(`${API_BASE_URL}/api/expenses`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -200,7 +199,7 @@
             }
 
             try {
-                const response = await fetch(`${EXPENSE_API_BASE_URL}/api/expenses/user/${userId}`);
+                const response = await fetch(`${API_BASE_URL}/api/expenses/user/${userId}`);
                 const expenses = await response.json();
                 const expenseList = document.getElementById('expenseList');
                 expenseList.innerHTML = ''; // Clear previous list
