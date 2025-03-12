@@ -106,6 +106,14 @@ Ensure you have the following installed and configured:
 
 ---
 
+## Preview
+
+### EC2 Instances
+![EC2 Instances](ec2s.png)
+
+### Web Application
+![Web Application](webapp.png)
+
 ## Contributing
 
 Contributions are welcome! Feel free to submit a PR or open an issue.
