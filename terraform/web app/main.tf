@@ -1,11 +1,4 @@
 terraform {
-  backend "s3" {
-    bucket = "terraform-20250212151906931400000001"
-    key    = "PET_tfstate/terraform.tfstate"
-    region = "eu-central-1"
-    dynamodb_table = "tfstate_locking"
-    encrypt        = true
-  }
 
   required_providers {
     aws = {
