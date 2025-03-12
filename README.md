@@ -114,6 +114,9 @@ Ensure you have the following installed and configured:
 ### Web Application
 ![Web Application](webapp.png)
 
+### RDS Instance
+![RDS Instance](rds.png)
+
 ## Contributing
 
 Contributions are welcome! Feel free to submit a PR or open an issue.
