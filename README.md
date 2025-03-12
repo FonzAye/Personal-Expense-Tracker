@@ -51,7 +51,7 @@ Ensure you have the following installed and configured:
 ### 1. Clone the Repository
 ```sh
  git clone https://github.com/FonzAye/Personal-Expense-Tracker.git
- cd Personal-Expense-Tracker
+ cd Personal-Expense-Tracker/terraform/web app
 ```
 ### 2. Initialize Terraform
 ```sh
