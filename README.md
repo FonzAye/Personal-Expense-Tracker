@@ -30,7 +30,7 @@ This project provisions the necessary AWS infrastructure for a personal expense 
   - Configures local routing and Internet Gateway.
 - **Security Groups**:
   - **EC2 SG**:
-    - Allows **SSH (22), API Server (8080), Frontend (5000)**.
+    - Allows **SSH (22), API Server (5000), Frontend (8080)**.
   - **DB SG**:
     - Allows **PostgreSQL (5432)** for EC2 instances and your IP.
 
