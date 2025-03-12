@@ -12,7 +12,7 @@ BACKEND_IP="${backend_ip}"
 
 cat <<EOF > /opt/client/config.js
 window.APP_CONFIG = {
-    BACKEND_IP: "$BACKEND_IP"
+    BACKEND_IP: "http://"+"$BACKEND_IP"+":5000"
 };
 EOF
 
